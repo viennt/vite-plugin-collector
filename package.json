@@ -1,0 +1,26 @@
+{
+  "name": "vite-plugin-collector",
+  "version": "0.0.1",
+  "description": "Module collector for Vite",
+  "author": "viennt",
+  "license": "ISC",
+  "bugs": "https://github.com/viennt/vite-plugin-collector/issues",
+  "homepage": "https://github.com/viennt/vite-plugin-collector#readme",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viennt/vite-plugin-collector.git"
+  },
+  "keywords": [
+    "vite",
+    "plugin"
+  ],
+  "scripts": {
+    "dev": "esno scripts/dev.ts",
+    "build": "esno scripts/build.ts"
+  },
+  "dependencies": {
+    "fast-glob": "^3.2.12",
+    "stringify-object": "^4.0.1"
+  }
+}
