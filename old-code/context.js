@@ -108,7 +108,7 @@ export class ModuleContext {
         return originalResult;
     }
 
-    async moduleResolver (item, content) {
+    async resolver (item, content) {
         return {...item, content}
     }
 
@@ -117,7 +117,7 @@ export class ModuleContext {
             [...this._moduleMap.values()].map(async (moduleItem) => {
                 const { fullFilePath } = moduleItem.file
                 const fileContent = fs.readFileSync(fullFilePath, { encoding: 'utf8' });
-                return await (this.options.moduleResolver || this.moduleResolver)(moduleItem, fileContent)
+                return await (this.options.resolver || this.resolver)(moduleItem, fileContent)
             })
         )).flat()
 

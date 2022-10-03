@@ -7,7 +7,7 @@ const initialOptions = {
     moduleId: '@modules',
 }
 
-export default (userOptions = initialOptions) => {
+export default (userOptions = {}) => {
     const MODULE_ID_VIRTUAL = 'virtual:viennt:vite-plugin-collector'
     let ctx;
 

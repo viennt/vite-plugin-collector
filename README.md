@@ -4,7 +4,7 @@ Module collector for Vite
 
 TODO:
 - [ ] Build scripts
-- [ ] Typescript support
+- [x] Typescript support
 - [ ] Examples
 - [ ] Built-in resolvers
 
