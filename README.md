@@ -7,6 +7,9 @@ TODO:
 - [x] Typescript support
 - [ ] Examples
 - [ ] Built-in resolvers
+- [ ] Nuxt support
+- [ ] React support
+- [ ] Svelte support
 
 ## Usages
 
