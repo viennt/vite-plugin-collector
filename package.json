@@ -1,6 +1,6 @@
 {
   "name": "@viennt/vite-plugin-collector",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "packageManager": "pnpm@7.12.0",
   "description": "Module collector for Vite",
   "author": "viennt <thevienit@gmail.com>",
@@ -31,20 +31,23 @@
     "workbox-window": "^6.5.4"
   },
   "dependencies": {
+    "@types/micromatch": "^4.0.2",
     "debug": "^4.3.4",
     "fast-glob": "^3.2.11",
+    "micromatch": "^4.0.5",
     "pretty-bytes": "^6.0.0",
     "stringify-object": "^4.0.1",
     "workbox-build": "^6.5.4",
     "workbox-window": "^6.5.4"
   },
   "devDependencies": {
-    "@antfu/utils": "^0.5.2",
     "@antfu/eslint-config": "^0.26.3",
     "@antfu/ni": "^0.18.0",
+    "@antfu/utils": "^0.5.2",
     "@types/debug": "^4.1.7",
     "@types/node": "^18.7.14",
     "@types/prompts": "^2.4.0",
+    "@types/stringify-object": "^4.0.1",
     "@types/workbox-build": "^5.0.1",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "eslint": "^8.23.0",

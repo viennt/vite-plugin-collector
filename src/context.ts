@@ -1,101 +1,125 @@
-import { join, resolve } from 'path';
-import { slash, toArray } from '@antfu/utils';
-import fg from 'fast-glob';
-import fs from 'fs';
-
 import type { ViteDevServer, ResolvedConfig } from 'vite';
-import type { ModuleFile, ResolvedViteOptions, ViteOptions } from './types';
+
+import fs, { FSWatcher } from 'fs';
+import fg from 'fast-glob';
+
+import { slash } from '@antfu/utils';
+import { join, resolve } from 'path';
+
 import { resolveOptions } from './options';
-import { moduleFileGenerator } from './module';
+import { moduleFileGenerator } from './utils';
+
+import type { ModuleFile, ResolvedViteOptions, ViteOptions, ResolvedModuleFile } from './types';
 
 export class ModuleContext {
     private _server: ViteDevServer | undefined;
     private _moduleFileMap = new Map<string, ModuleFile>();
 
-    public viteConfig: ResolvedConfig;
-    public userOptions: ViteOptions;
-    public options: ResolvedViteOptions;
+    private readonly _userOptions: ViteOptions;
+    private readonly _options: ResolvedViteOptions;
 
-    constructor(userOptions, viteConfig: ResolvedConfig) {
-        this.viteConfig = viteConfig;
-        this.userOptions = userOptions;
-        this.options = resolveOptions(userOptions, viteConfig);
+    constructor(userOptions: ViteOptions, viteConfig: ResolvedConfig) {
+        this._userOptions = userOptions;
+        this._options = resolveOptions(userOptions, viteConfig);
     }
 
-    setupViteServer(server: ViteDevServer) {
-        if (this._server === server) {
-            return;
+    async searchGlob() {
+        for (const pattern of this._options.patterns) {
+            const fullPathPattern = slash(resolve(this._options.root, pattern));
+
+            const files: string[] = this.getModuleFiles(fullPathPattern);
+
+            for await (const file of files) {
+                const fullFilePath = slash(file);
+                const moduleFile = moduleFileGenerator(fullFilePath, this._options.root);
+                this._moduleFileMap.set(fullFilePath, moduleFile);
+            }
         }
-
-        this._server = server;
-        // this.setupWatcher(server.watcher)
     }
 
-    getModuleFiles(path: string, options: ResolvedViteOptions): string[] {
-        return fg.sync(slash(join(path, `**/${options.filesReg}`)), {
+    getModuleFiles(fullPathPattern: string): string[] {
+        return fg.sync(slash(join(fullPathPattern)), {
             onlyFiles: true,
         });
     }
 
-    async addModuleFiles(paths: string[], moduleDir) {
-        for (const fullFilePath of toArray(paths)) {
-            const moduleFile = moduleFileGenerator(fullFilePath, moduleDir, this.options.root);
-            this._moduleFileMap.set(fullFilePath, moduleFile);
-        }
-    }
-
-    async searchGlob() {
-        const modules = this.options.moduleDirs.map((moduleDir) => {
-            const moduleDirPath = slash(resolve(this.options.root, moduleDir));
-            const files = this.getModuleFiles(moduleDirPath, this.options);
-
-            return {
-                moduleDir,
-                files: files.map(file => slash(file)),
-            };
-        });
-
-        for (const mod of modules) {
-            await this.addModuleFiles(mod.files, mod.moduleDir);
-        }
-    }
-
-    // _server.watcher.on('add', async(path) => {
-    //     path = slash(path)
-    //     if (!isTarget(path, userOptions)) {
-    //         return
-    //     }
-    // })
-
-    // _server.watcher.on('change', async(path) => {
-    //     console.log('++++++++++++++++')
-    //     path = slash(path)
-    //     if (!isTarget(path, userOptions)) {
-    //         return
-    //     }
-    //     console.log('change', path)
-    // })
-
     async resolveModules() {
-        const moduleFiles = (await Promise.all(
-            this.moduleFiles.map(async (moduleFile: ModuleFile) => {
-                const { fullFilePath } = moduleFile.fileInfo;
-                const fileContent = fs.readFileSync(fullFilePath, { encoding: 'utf8' });
-                return await this.options?.resolver?.(moduleFile, fileContent);
-            })
-        )).flat();
+        const moduleFiles: Object[] = (await Promise.all(this.moduleFiles.map(this.handleFileContent.bind(this))))
+            .filter((resolvedObject: Object[]) => typeof resolvedObject !== 'undefined')
+            .flat();
 
         const { default: stringifyObject } = await import('stringify-object');
-        const resultStrings = moduleFiles
-            .filter((moduleFile: ModuleFile) => !!moduleFile)
-            .map((moduleFile: ModuleFile) => stringifyObject(moduleFile, {
-                transform: this.options?.transform
-            }));
+        const resultStrings = moduleFiles.map((resolvedObject: Object) => stringifyObject(resolvedObject, {
+            transform: this._options?.transform
+        }));
 
         return `export default [${resultStrings}]`;
     }
 
-    get moduleFiles() {
+    async handleFileContent(moduleFile: ModuleFile): Promise<ResolvedModuleFile[] | Object[]> {
+        const { fullFilePath } = moduleFile.fileInfo;
+        const fileContent = fs.readFileSync(fullFilePath, { encoding: 'utf8' });
+        return this._options?.resolver?.(moduleFile, fileContent);
+    }
+
+    // onUpdate() {
+    //     if (!this._server) {
+    //         return;
+    //     }
+    //
+    //     // invalidatePagesModule(this._server)
+    //     this._server.ws.send({
+    //         type: 'full-reload',
+    //     });
+    // }
+
+    setupWatcher(watcher: FSWatcher) {
+        // watcher.on('change', async (fullFilePath) => {
+        //     fullFilePath = slash(fullFilePath);
+        //
+        //     const moduleDir = getModuleByFullFilePath(fullFilePath, this._options)
+        //     if (!moduleDir) {
+        //         return
+        //     }
+        //
+        //     const moduleFile = moduleFileGenerator(fullFilePath, moduleDir, this._options.root);
+        //     this._moduleFileMap.set(fullFilePath, moduleFile);
+        //     this.onUpdate()
+        // });
+
+        // watcher
+        //     .on('unlink', async(path) => {
+        //         path = slash(path)
+        //         if (!isTarget(path, this._options)) {
+        //             return
+        //         }
+        //         this._moduleFileMap.delete(path)
+        //         this.onUpdate()
+        //     })
+        //
+        // watcher.on('add', async(path) => {
+        //     path = slash(path)
+        //     if (!isTarget(path, userOptions)) {
+        //         return
+        //     }
+        // })
+
+    }
+
+    set server(value: ViteDevServer) {
+        if (this._server === value) {
+            return;
+        }
+
+        this._server = value;
+        this.setupWatcher(this._server.watcher);
+    }
+
+    get moduleFiles(): ModuleFile[] {
         return Array.from(this._moduleFileMap.values());
+    }
+
+    get userOptions(): ViteOptions {
+        return this._userOptions;
     }
 }

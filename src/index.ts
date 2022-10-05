@@ -1,29 +1,31 @@
-import { ViteOptions } from './types';
+import type { ViteDevServer, ResolvedConfig } from 'vite';
+import type { ViteOptions } from './types';
+
 import { ModuleContext } from './context';
 import { VIRTUAL_MODULES_RESOLVE_PREFIX } from './constants';
 
 function VitePluginCollector(userOptions: ViteOptions) {
-    let ctx;
+    let ctx: ModuleContext;
 
     return {
         name: 'vite-plugin-collector',
-        async configResolved(config) {
+        async configResolved(config: ResolvedConfig) {
             ctx = new ModuleContext(userOptions, config);
             await ctx.searchGlob();
         },
-        configureServer(server) {
-            ctx.setupViteServer(server);
+        configureServer(server: ViteDevServer) {
+            ctx.server = server;
         },
-        resolveId(id) {
+        resolveId(id: string) {
             return id === userOptions.moduleId ? VIRTUAL_MODULES_RESOLVE_PREFIX + id : undefined;
         },
-        load(id) {
+        load(id: string) {
             if (!id.startsWith(VIRTUAL_MODULES_RESOLVE_PREFIX)) {
                 return;
             }
 
             const moduleId = id.slice(VIRTUAL_MODULES_RESOLVE_PREFIX.length);
-            if (ctx.options.moduleId !== moduleId) {
+            if (ctx.userOptions.moduleId !== moduleId) {
                 return;
             }
 
@@ -32,6 +34,6 @@ function VitePluginCollector(userOptions: ViteOptions) {
     };
 }
 
-export * from './types'
-export default VitePluginCollector
-export type { ViteOptions as Options }
+export * from './types';
+export type { ViteOptions as Options };
+export default VitePluginCollector;

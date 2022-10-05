@@ -18,10 +18,12 @@ TODO:
 ...
 plugins: [
     vitePluginCollector({
-        moduleDirs: ['src/modules/', 'src/static-modules/'],
-        filesReg: '*.route.js',
+        pattern: [
+            'src/modules/**/routes.js',
+            'src/static-modules/**/routes.js'
+        ],
         moduleId: '~/routes',
-    })
+    }),
 ]
 ```
 

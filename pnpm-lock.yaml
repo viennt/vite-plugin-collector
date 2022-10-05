@@ -5,14 +5,17 @@ specifiers:
   '@antfu/ni': ^0.18.0
   '@antfu/utils': ^0.5.2
   '@types/debug': ^4.1.7
+  '@types/micromatch': ^4.0.2
   '@types/node': ^18.7.14
   '@types/prompts': ^2.4.0
+  '@types/stringify-object': ^4.0.1
   '@types/workbox-build': ^5.0.1
   '@typescript-eslint/eslint-plugin': ^5.36.2
   debug: ^4.3.4
   eslint: ^8.23.0
   esno: 0.16.3
   fast-glob: ^3.2.11
+  micromatch: ^4.0.5
   pretty-bytes: ^6.0.0
   prompts: ^2.4.2
   rollup: ^2.79.0
@@ -25,8 +28,10 @@ specifiers:
   workbox-window: ^6.5.4
 
 dependencies:
+  '@types/micromatch': 4.0.2
   debug: 4.3.4
   fast-glob: 3.2.12
+  micromatch: 4.0.5
   pretty-bytes: 6.0.0
   stringify-object: 4.0.1
   workbox-build: 6.5.4
@@ -39,6 +44,7 @@ devDependencies:
   '@types/debug': 4.1.7
   '@types/node': 18.8.2
   '@types/prompts': 2.4.0
+  '@types/stringify-object': 4.0.1
   '@types/workbox-build': 5.0.1
   '@typescript-eslint/eslint-plugin': 5.39.0_ypn2ylkkyfa5i233caldtndbqa
   eslint: 8.24.0
@@ -1522,6 +1528,10 @@ packages:
       string.prototype.matchall: 4.0.7
     dev: false
 
+  /@types/braces/3.0.1:
+    resolution: {integrity: sha512-+euflG6ygo4bn0JHtn4pYqcXwRtLvElQ7/nnjDu7iYG56H0+OhCd7d6Ug0IE3WcFpZozBKW2+80FUbv5QGk5AQ==}
+    dev: false
+
   /@types/debug/4.1.7:
     resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
     dependencies:
@@ -1546,6 +1556,12 @@ packages:
       '@types/unist': 2.0.6
     dev: true
 
+  /@types/micromatch/4.0.2:
+    resolution: {integrity: sha512-oqXqVb0ci19GtH0vOA/U2TmHTcRY9kuZl4mqUxe0QmJAlIW13kzhuK5pi1i9+ngav8FjpSb9FVS/GE00GLX1VA==}
+    dependencies:
+      '@types/braces': 3.0.1
+    dev: false
+
   /@types/ms/0.7.31:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: true
@@ -1566,6 +1582,10 @@ packages:
     dependencies:
       '@types/node': 18.8.2
     dev: false
+
+  /@types/stringify-object/4.0.1:
+    resolution: {integrity: sha512-IBlbUGpI7FoWWr1FHQDntMkA7nCEI7Hox/hmwgWgRqohV7SRRkbWB86PayOX++NwtJTapQ8wIs7XtEp4fXonwA==}
+    dev: true
 
   /@types/trusted-types/2.0.2:
     resolution: {integrity: sha512-F5DIZ36YVLE+PN+Zwws4kJogq47hNgX3Nx6WyDJ3kcplxyke3XIzB8uK5n/Lpm1HBsbGzd6nmGehL8cPekP+Tg==}

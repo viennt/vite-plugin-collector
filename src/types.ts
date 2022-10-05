@@ -1,22 +1,19 @@
-export interface ModuleInformation {
-    moduleName: string,
-    moduleDir: string,
-    moduleDirPath: string,
-}
-
 export interface FileInformation {
     fileName: string,
     fileExtension: string,
     fileFullName: string,
     fullFilePath: string,
     relativeRootPath: string,
-    relativeModulePath: string,
     isPrivate: boolean,
 }
 
 export interface ModuleFile {
-    moduleInfo: ModuleInformation,
     fileInfo: FileInformation
+}
+
+export interface ResolvedModuleFile extends ModuleFile {
+    fileInfo: FileInformation,
+    content: string
 }
 
 /**
@@ -24,18 +21,10 @@ export interface ModuleFile {
  */
 export interface ViteOptions {
     /**
-     * Paths to the directory to search for modules.
-     * @default ['modules/']
+     * Pattern string to find files in modules.
+     * @default ['src/modules/*.module.js']
      */
-    moduleDirs: string[]
-    /**
-     * Regex string for files in modules.
-     * @default '*.module.js'
-     * TODO: use subFolders and extensions
-     * subFolders: 'locales'
-     * extensions: 'json'
-     */
-    filesReg: string
+    patterns: string[]
     /**
      * Module id for routes import
      * @default '~collector'
@@ -44,11 +33,11 @@ export interface ViteOptions {
     /**
      * File resolver
      */
-    resolver?: (item: ModuleFile, content: string) => Promise<object>
+    resolver?: (item: ModuleFile, content: string) => Promise<ResolvedModuleFile[] | Object[]>
     /**
      * Transform object
      */
-    transform?: (object: any, property: string, originalResult: any) => any
+    transform?: (object: object | any[], property: string | number | symbol, originalResult: string) => string
 }
 
 export interface ResolvedViteOptions extends Required<ViteOptions> {
@@ -58,15 +47,10 @@ export interface ResolvedViteOptions extends Required<ViteOptions> {
      */
     root: string
     /**
-     * Paths to the directory to search for modules.
-     * @default ['modules/']
+     * Pattern string to find files in modules.
+     * @default ['src/modules/*.module.js']
      */
-    moduleDirs: string[]
-    /**
-     * Regex string for files in modules.
-     * @default '*.module.js'
-     */
-    filesReg: string
+    patterns: string[]
     /**
      * Module id for routes import
      * @default '~collector'
@@ -75,9 +59,9 @@ export interface ResolvedViteOptions extends Required<ViteOptions> {
     /**
      * File resolver
      */
-    resolver: (item: ModuleFile, content: string) => Promise<object>
+    resolver: (item: ModuleFile, content: string) => Promise<ResolvedModuleFile[] | Object[]>
     /**
      * Transform object
      */
-    transform: (object: any, property: string, originalResult: any) => any
+    transform: (object: object | any[], property: string | number | symbol, originalResult: string) => string
 }
