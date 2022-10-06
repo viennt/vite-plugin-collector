@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 // import { ensurePrefix, ensureSuffix } from '@antfu/utils';
 
-import type { FileInformation, ModuleFile } from './types';
+import type { ModuleFile } from './types';
 
 // export function ensureSlash(str: string) {
 //     return ensureSuffix('/', ensurePrefix('/', str));
@@ -37,16 +37,12 @@ export function moduleFileGenerator(fullFilePath: string, viteRoot: string): Mod
     const fileName = fileFullName.split('.').slice(0, -1).join('.');
     const isPrivate = fileName.startsWith('_');
 
-    const fileInfo: FileInformation = {
+    return {
         fileName,
         fileExtension,
         fileFullName,
         fullFilePath,
         relativeRootPath,
         isPrivate,
-    };
-
-    return {
-        fileInfo,
     };
 }

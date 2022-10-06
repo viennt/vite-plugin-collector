@@ -1,44 +1,165 @@
 # @viennt/vite-plugin-collector
 
+`WIP: This plugin is NOT ready for production yet.`
+
 Module collector for Vite
 
-TODO:
-- [ ] Build scripts
-- [x] Typescript support
+## How to use
+
+### Install
+
+```bash
+yarn add @viennt/vite-plugin-collector
+# or
+pnpm add @viennt/vite-plugin-collector
+```
+
+### Usages
+
+```javascript
+// vite.config.ts
+import collector from '@viennt/vite-plugin-collector';
+
+export default {
+    plugins: [
+        collector(/* options */),
+    ]
+}
+```
+
+## APIs
+
+### Options
+
+```typescript
+export interface ViteOptions {
+    /**
+     * Pattern string to find files in modules.
+     * @default []
+     */
+    patterns: string[]
+    /**
+     * Module id for routes import
+     * @default '~collector'
+     */
+    moduleId: string
+    /**
+     * File resolver
+     */
+    resolver?: (item: ModuleFile, sourceString: string) => Promise<ResolvedModuleFile[]>
+    /**
+     * Transform object
+     */
+    transform?: (object: object | any[], property: string | number | symbol, originalResult: string) => string
+}
+```
+
+### ModuleFile
+
+```typescript
+export interface ModuleFile {
+    fileName: string,
+    fileExtension: string,
+    fileFullName: string,
+    fullFilePath: string,
+    relativeRootPath: string,
+    isPrivate: boolean,
+}
+```
+
+## Examples
+
+### Folder structure
+
+```bash
+├── public
+└── src
+    └── modules
+        ├── products
+        │   ├── components/*.vue
+        │   ├── pages
+        │   │   ├── products-index.vue
+        │   │   ├── products-create.json
+        │   │   └── products-update.json
+        │   ├── routes.json
+        │   └── navigations.json
+        │
+        ├── users
+        │   ├── components/*.vue
+        │   ├── pages
+        │   │   ├── users-index.vue
+        │   │   ├── users-create.json
+        │   │   └── users-update.json
+        │   ├── routes.json
+        │   └── navigations.json
+        │
+        └── ...
+```
+
+### 1. Collect navigations
+
+```json
+// src/modules/products/navigations.json
+[
+    {
+        "id": "menu-products",
+        "path": "products",
+        "label": "Products",
+        "position": 2
+    }
+]
+```
+
+```javascript
+// vite.config.ts
+import collector from '@viennt/vite-plugin-collector';
+
+export default {
+    plugins: [
+        collector({
+            patterns: ['src/modules/**/navigations.json'],
+            moduleId: '~navigations',
+            resolver: (item: ModuleFile, sourceString: string) => {
+                return JSON.parse(sourceString);
+            },
+        }),
+    ]
+}
+```
+
+```javascript
+// sidebar.vue
+import navigations from '~navigations'
+```
+
+The result will be:
+```javascript
+[
+    {
+        "id": "menu-customers",
+        "path": "customers",
+        "label": "Customers",
+        "position": 1
+    },
+    {
+        "id": "menu-products",
+        "path": "products",
+        "label": "Products",
+        "position": 2
+    }
+]
+```
+
+### 2. Collect routes
+In progress
+### 3. Collect components
+In progress
+
+---
+## TODO
+
 - [ ] Examples
 - [ ] Built-in resolvers
 - [ ] Nuxt support
 - [ ] React support
 - [ ] Svelte support
-
-## Usages
-
-```javascript
-// vite.config.js
-...
-plugins: [
-    vitePluginCollector({
-        pattern: [
-            'src/modules/**/routes.js',
-            'src/static-modules/**/routes.js'
-        ],
-        moduleId: '~/routes',
-    }),
-]
-```
-
-```javascript
-// src/main.js
-import { createApp } from 'vue'
-import routes from '~/routes'
-
-const app = createApp(appVue)
-
-app.use(createRouter({
-    routes,
-}))
-
-router.isReady().then(() => {
-    app.mount('#app')
-})
-```

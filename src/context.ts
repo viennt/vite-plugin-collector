@@ -9,7 +9,7 @@ import { join, resolve } from 'path';
 import { resolveOptions } from './options';
 import { moduleFileGenerator } from './utils';
 
-import type { ModuleFile, ResolvedViteOptions, ViteOptions, ResolvedModuleFile } from './types';
+import type { ResolvedViteOptions, ViteOptions, ResolvedModuleFile, ModuleFile } from './types';
 
 export class ModuleContext {
     private _server: ViteDevServer | undefined;
@@ -56,10 +56,10 @@ export class ModuleContext {
         return `export default [${resultStrings}]`;
     }
 
-    async handleFileContent(moduleFile: ModuleFile): Promise<ResolvedModuleFile[] | Object[]> {
-        const { fullFilePath } = moduleFile.fileInfo;
-        const fileContent = fs.readFileSync(fullFilePath, { encoding: 'utf8' });
-        return this._options?.resolver?.(moduleFile, fileContent);
+    async handleFileContent(moduleFile: ModuleFile): Promise<ResolvedModuleFile[]> {
+        const { fullFilePath } = moduleFile;
+        const sourceString = fs.readFileSync(fullFilePath, { encoding: 'utf8' });
+        return this._options?.resolver?.(moduleFile, sourceString);
     }
 
     // onUpdate() {

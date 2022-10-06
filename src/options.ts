@@ -1,14 +1,14 @@
 import { slash } from '@antfu/utils';
-import { OPTION_PATTERN, OPTION_MODULE_ID } from './constants';
+import { OPTION_PATTERNS, OPTION_MODULE_ID } from './constants';
 
 import type { ResolvedConfig } from 'vite';
-import type { ModuleFile, ResolvedViteOptions, ViteOptions, ResolvedModuleFile } from './types';
+import type { ResolvedViteOptions, ViteOptions, ResolvedModuleFile, ModuleFile } from './types';
 
 /**
  * Default resolver function
  */
-async function defaultResolver(item: ModuleFile, content: string): Promise<ResolvedModuleFile[] | Object[]> {
-    return [{ ...item, content }];
+async function defaultResolver(file: ModuleFile, sourceString: string): Promise<ResolvedModuleFile[]> {
+    return [{ file, sourceString }];
 }
 
 /**
@@ -27,7 +27,7 @@ function defaultTransform(_: object | any[], property: string | number | symbol,
  */
 export function resolveOptions(userOptions: Partial<ViteOptions>, viteConfig: ResolvedConfig): ResolvedViteOptions {
     const root = viteConfig.root || slash(process.cwd());
-    const patterns = userOptions.patterns || [OPTION_PATTERN];
+    const patterns = userOptions.patterns || OPTION_PATTERNS;
     const moduleId = userOptions.moduleId || OPTION_MODULE_ID;
 
     const resolver = userOptions.resolver || defaultResolver;

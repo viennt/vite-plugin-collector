@@ -1,4 +1,4 @@
-export interface FileInformation {
+export interface ModuleFile {
     fileName: string,
     fileExtension: string,
     fileFullName: string,
@@ -7,13 +7,9 @@ export interface FileInformation {
     isPrivate: boolean,
 }
 
-export interface ModuleFile {
-    fileInfo: FileInformation
-}
-
-export interface ResolvedModuleFile extends ModuleFile {
-    fileInfo: FileInformation,
-    content: string
+export interface ResolvedModuleFile {
+    file: ModuleFile,
+    sourceString: string
 }
 
 /**
@@ -22,7 +18,7 @@ export interface ResolvedModuleFile extends ModuleFile {
 export interface ViteOptions {
     /**
      * Pattern string to find files in modules.
-     * @default ['src/modules/*.module.js']
+     * @default []
      */
     patterns: string[]
     /**
@@ -33,7 +29,7 @@ export interface ViteOptions {
     /**
      * File resolver
      */
-    resolver?: (item: ModuleFile, content: string) => Promise<ResolvedModuleFile[] | Object[]>
+    resolver?: (file: ModuleFile, sourceString: string) => Promise<ResolvedModuleFile[]>
     /**
      * Transform object
      */
@@ -48,7 +44,7 @@ export interface ResolvedViteOptions extends Required<ViteOptions> {
     root: string
     /**
      * Pattern string to find files in modules.
-     * @default ['src/modules/*.module.js']
+     * @default []
      */
     patterns: string[]
     /**
@@ -59,7 +55,7 @@ export interface ResolvedViteOptions extends Required<ViteOptions> {
     /**
      * File resolver
      */
-    resolver: (item: ModuleFile, content: string) => Promise<ResolvedModuleFile[] | Object[]>
+    resolver: (file: ModuleFile, sourceString: string) => Promise<ResolvedModuleFile[]>
     /**
      * Transform object
      */
