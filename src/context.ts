@@ -9,16 +9,16 @@ import { join, resolve } from 'path';
 import { resolveOptions } from './options';
 import { moduleFileGenerator } from './utils';
 
-import type { ResolvedViteOptions, ViteOptions, ResolvedModuleFile, ModuleFile } from './types';
+import type { ResolvedOptions, UserOptions, ResolvedModuleFile, ModuleFile } from './types';
 
 export class ModuleContext {
     private _server: ViteDevServer | undefined;
     private _moduleFileMap = new Map<string, ModuleFile>();
 
-    private readonly _userOptions: ViteOptions;
-    private readonly _options: ResolvedViteOptions;
+    private readonly _userOptions: UserOptions;
+    private readonly _options: ResolvedOptions;
 
-    constructor(userOptions: ViteOptions, viteConfig: ResolvedConfig) {
+    constructor(userOptions: UserOptions, viteConfig: ResolvedConfig) {
         this._userOptions = userOptions;
         this._options = resolveOptions(userOptions, viteConfig);
     }
@@ -119,7 +119,7 @@ export class ModuleContext {
         return Array.from(this._moduleFileMap.values());
     }
 
-    get userOptions(): ViteOptions {
+    get userOptions(): UserOptions {
         return this._userOptions;
     }
 }

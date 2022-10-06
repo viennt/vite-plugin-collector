@@ -32,7 +32,7 @@ export default {
 ### Options
 
 ```typescript
-export interface ViteOptions {
+export interface UserOptions {
     /**
      * Pattern string to find files in modules.
      * @default []
@@ -79,8 +79,8 @@ export interface ModuleFile {
         │   ├── components/*.vue
         │   ├── pages
         │   │   ├── products-index.vue
-        │   │   ├── products-create.json
-        │   │   └── products-update.json
+        │   │   ├── products-create.vue
+        │   │   └── products-update.vue
         │   ├── routes.json
         │   └── navigations.json
         │
@@ -88,8 +88,8 @@ export interface ModuleFile {
         │   ├── components/*.vue
         │   ├── pages
         │   │   ├── users-index.vue
-        │   │   ├── users-create.json
-        │   │   └── users-update.json
+        │   │   ├── users-create.vue
+        │   │   └── users-update.vue
         │   ├── routes.json
         │   └── navigations.json
         │
@@ -130,6 +130,8 @@ export default {
 ```javascript
 // sidebar.vue
 import navigations from '~navigations'
+
+console.log(navigations)
 ```
 
 The result will be:
@@ -158,8 +160,8 @@ In progress
 ---
 ## TODO
 
-- [ ] Examples
-- [ ] Built-in resolvers
-- [ ] Nuxt support
-- [ ] React support
-- [ ] Svelte support
+- Examples
+- Built-in resolvers
+- Nuxt support
+- React support
+- Svelte support

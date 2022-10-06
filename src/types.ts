@@ -15,7 +15,7 @@ export interface ResolvedModuleFile {
 /**
  * Plugin options.
  */
-export interface ViteOptions {
+export interface UserOptions {
     /**
      * Pattern string to find files in modules.
      * @default []
@@ -36,7 +36,7 @@ export interface ViteOptions {
     transform?: (object: object | any[], property: string | number | symbol, originalResult: string) => string
 }
 
-export interface ResolvedViteOptions extends Required<ViteOptions> {
+export interface ResolvedOptions extends Required<UserOptions> {
     /**
      * Resolves to the `root` value from Vite config.
      * @default config.root

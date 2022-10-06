@@ -2,7 +2,7 @@ import { slash } from '@antfu/utils';
 import { OPTION_PATTERNS, OPTION_MODULE_ID } from './constants';
 
 import type { ResolvedConfig } from 'vite';
-import type { ResolvedViteOptions, ViteOptions, ResolvedModuleFile, ModuleFile } from './types';
+import type { ResolvedOptions, UserOptions, ResolvedModuleFile, ModuleFile } from './types';
 
 /**
  * Default resolver function
@@ -25,7 +25,7 @@ function defaultTransform(_: object | any[], property: string | number | symbol,
 /**
  * Resolve User Options
  */
-export function resolveOptions(userOptions: Partial<ViteOptions>, viteConfig: ResolvedConfig): ResolvedViteOptions {
+export function resolveOptions(userOptions: Partial<UserOptions>, viteConfig: ResolvedConfig): ResolvedOptions {
     const root = viteConfig.root || slash(process.cwd());
     const patterns = userOptions.patterns || OPTION_PATTERNS;
     const moduleId = userOptions.moduleId || OPTION_MODULE_ID;

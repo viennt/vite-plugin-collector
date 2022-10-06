@@ -11,7 +11,7 @@ import type { ModuleFile } from './types';
 //     return `**${ensureSlash(moduleDir)}**${ensurePrefix('/', regex)}`;
 // }
 
-// export function getModuleByFullFilePath(fullFilePath: string, options: ResolvedViteOptions): string | undefined {
+// export function getModuleByFullFilePath(fullFilePath: string, options: ResolvedOptions): string | undefined {
 //     return options.patterns.find(moduleDir => {
 //         const pattern = buildPatternByModuleAndRegex(moduleDir, options.pattern);
 //         return micromatch.isMatch(fullFilePath, pattern)
