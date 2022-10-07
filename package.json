@@ -7,6 +7,14 @@
   "license": "MIT",
   "bugs": "https://github.com/viennt/vite-plugin-collector/issues",
   "homepage": "https://github.com/viennt/vite-plugin-collector#readme",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./*": "./*"
+  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

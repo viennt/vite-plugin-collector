@@ -37,9 +37,9 @@ export interface UserOptions {
      * Pattern string to find files in modules.
      * @default []
      */
-    patterns: string[]
+    patterns: string | string[]
     /**
-     * Module id for routes import
+     * Module id for import
      * @default '~collector'
      */
     moduleId: string

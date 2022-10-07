@@ -23,11 +23,22 @@ function defaultTransform(_: object | any[], property: string | number | symbol,
 }
 
 /**
+ * Check if it's a string then change to array
+ */
+function ensureArray(value: string | string[]): string[] {
+    if (Array.isArray(value)) {
+        return value;
+    }
+
+    return [value];
+}
+
+/**
  * Resolve User Options
  */
 export function resolveOptions(userOptions: Partial<UserOptions>, viteConfig: ResolvedConfig): ResolvedOptions {
     const root = viteConfig.root || slash(process.cwd());
-    const patterns = userOptions.patterns || OPTION_PATTERNS;
+    const patterns = ensureArray(userOptions.patterns || OPTION_PATTERNS);
     const moduleId = userOptions.moduleId || OPTION_MODULE_ID;
 
     const resolver = userOptions.resolver || defaultResolver;
