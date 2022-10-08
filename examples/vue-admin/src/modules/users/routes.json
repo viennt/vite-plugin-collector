@@ -1,0 +1,7 @@
+[
+    {
+        "name": "users",
+        "path": "/users",
+        "view": "users-index"
+    }
+]

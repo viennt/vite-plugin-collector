@@ -1,0 +1,22 @@
+{
+  "name": "vue-admin",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "rimraf dev-dist && cross-env DEBUG=@viennt/vite-plugin-collector:* vite --force",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.2.37",
+    "vue-router": "4"
+  },
+  "devDependencies": {
+    "@viennt/vite-plugin-collector": "workspace:*",
+    "@vitejs/plugin-vue": "^3.1.0",
+    "cross-env": "^7.0.3",
+    "rimraf": "^3.0.2",
+    "vite": "^3.1.0"
+  }
+}

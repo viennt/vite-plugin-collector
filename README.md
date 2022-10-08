@@ -104,8 +104,7 @@ export interface ModuleFile {
     {
         "id": "menu-products",
         "path": "products",
-        "label": "Products",
-        "position": 2
+        "label": "Products"
     }
 ]
 ```
@@ -140,14 +139,12 @@ The result will be:
     {
         "id": "menu-customers",
         "path": "customers",
-        "label": "Customers",
-        "position": 1
+        "label": "Customers"
     },
     {
         "id": "menu-products",
         "path": "products",
-        "label": "Products",
-        "position": 2
+        "label": "Products"
     }
 ]
 ```

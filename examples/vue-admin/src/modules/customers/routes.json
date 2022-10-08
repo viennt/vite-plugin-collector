@@ -1,0 +1,7 @@
+[
+    {
+        "name": "customers",
+        "path": "/customers",
+        "view": "customers-index"
+    }
+]

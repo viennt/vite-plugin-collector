@@ -1,0 +1,7 @@
+[
+    {
+        "name": "products",
+        "path": "/products",
+        "view": "products-index"
+    }
+]
