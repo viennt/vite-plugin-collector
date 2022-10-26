@@ -1,13 +1,12 @@
-import type { ViteDevServer, ResolvedConfig } from 'vite';
-
-import fs, { FSWatcher } from 'fs';
 import fg from 'fast-glob';
-
-import { slash } from '@antfu/utils';
+import fs, { FSWatcher } from 'fs';
+import { normalizePath } from 'vite'
 import { join, resolve } from 'path';
 
+import type { ViteDevServer, ResolvedConfig } from 'vite';
+
 import { resolveOptions } from './options';
-import { moduleFileGenerator } from './utils';
+import { invalidateFilesModule, isMatchPatterns, moduleFileGenerator } from './utils';
 
 import type { ResolvedOptions, UserOptions, ResolvedModuleFile, ModuleFile } from './types';
 
@@ -25,12 +24,12 @@ export class ModuleContext {
 
     async searchGlob() {
         for (const pattern of this._options.patterns) {
-            const fullPathPattern = slash(resolve(this._options.root, pattern));
+            const fullPathPattern = normalizePath(resolve(this._options.root, pattern));
 
             const files: string[] = this.getModuleFiles(fullPathPattern);
 
             for await (const file of files) {
-                const fullFilePath = slash(file);
+                const fullFilePath = normalizePath(file);
                 const moduleFile = moduleFileGenerator(fullFilePath, this._options.root);
                 this._moduleFileMap.set(fullFilePath, moduleFile);
             }
@@ -38,7 +37,7 @@ export class ModuleContext {
     }
 
     getModuleFiles(fullPathPattern: string): string[] {
-        return fg.sync(slash(join(fullPathPattern)), {
+        return fg.sync(normalizePath(join(fullPathPattern)), {
             onlyFiles: true,
         });
     }
@@ -62,48 +61,55 @@ export class ModuleContext {
         return this._options?.resolver?.(moduleFile, sourceString);
     }
 
-    // onUpdate() {
-    //     if (!this._server) {
-    //         return;
-    //     }
-    //
-    //     // invalidatePagesModule(this._server)
-    //     this._server.ws.send({
-    //         type: 'full-reload',
-    //     });
-    // }
+    updateAndReload() {
+        if (!this._server) {
+            return;
+        }
+
+        invalidateFilesModule(this._server)
+
+        this._server.ws.send({
+            type: 'full-reload',
+        });
+    }
 
     setupWatcher(watcher: FSWatcher) {
-        // watcher.on('change', async (fullFilePath) => {
-        //     fullFilePath = slash(fullFilePath);
-        //
-        //     const moduleDir = getModuleByFullFilePath(fullFilePath, this._options)
-        //     if (!moduleDir) {
-        //         return
-        //     }
-        //
-        //     const moduleFile = moduleFileGenerator(fullFilePath, moduleDir, this._options.root);
-        //     this._moduleFileMap.set(fullFilePath, moduleFile);
-        //     this.onUpdate()
-        // });
+        watcher.on('add', async(path) => {
+            const fullFilePath = normalizePath(path);
+            if (!isMatchPatterns(fullFilePath, this._options.patterns)) {
+                return
+            }
 
-        // watcher
-        //     .on('unlink', async(path) => {
-        //         path = slash(path)
-        //         if (!isTarget(path, this._options)) {
-        //             return
-        //         }
-        //         this._moduleFileMap.delete(path)
-        //         this.onUpdate()
-        //     })
-        //
-        // watcher.on('add', async(path) => {
-        //     path = slash(path)
-        //     if (!isTarget(path, userOptions)) {
-        //         return
-        //     }
-        // })
+            const moduleFile = moduleFileGenerator(fullFilePath, this._options.root);
+            this._moduleFileMap.set(fullFilePath, moduleFile);
 
+            this.updateAndReload()
+        })
+
+        watcher.on('change', async (path) => {
+            const fullFilePath = normalizePath(path);
+            if (!isMatchPatterns(fullFilePath, this._options.patterns)) {
+                return
+            }
+
+            const file = this._moduleFileMap.get(fullFilePath);
+            if (!file) {
+                return
+            }
+
+            this.updateAndReload()
+        });
+
+        watcher.on('unlink', async(path) => {
+            const fullFilePath = normalizePath(path);
+            if (!isMatchPatterns(fullFilePath, this._options.patterns)) {
+                return
+            }
+
+            this._moduleFileMap.delete(fullFilePath)
+
+            this.updateAndReload()
+        })
     }
 
     set server(value: ViteDevServer) {
@@ -112,7 +118,7 @@ export class ModuleContext {
         }
 
         this._server = value;
-        this.setupWatcher(this._server.watcher);
+        this.setupWatcher(value.watcher);
     }
 
     get moduleFiles(): ModuleFile[] {

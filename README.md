@@ -96,9 +96,7 @@ export interface ModuleFile {
         └── ...
 ```
 
-### 1. Collect navigations
-
-```json
+```js
 // src/modules/products/navigations.json
 [
     {
@@ -148,11 +146,6 @@ The result will be:
     }
 ]
 ```
-
-### 2. Collect routes
-In progress
-### 3. Collect components
-In progress
 
 ---
 ## TODO

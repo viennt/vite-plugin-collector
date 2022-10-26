@@ -1,4 +1,5 @@
-import { slash } from '@antfu/utils';
+import { normalizePath } from 'vite'
+
 import { OPTION_PATTERNS, OPTION_MODULE_ID } from './constants';
 
 import type { ResolvedConfig } from 'vite';
@@ -37,7 +38,7 @@ function ensureArray(value: string | string[]): string[] {
  * Resolve User Options
  */
 export function resolveOptions(userOptions: Partial<UserOptions>, viteConfig: ResolvedConfig): ResolvedOptions {
-    const root = viteConfig.root || slash(process.cwd());
+    const root = viteConfig.root || normalizePath(process.cwd());
     const patterns = ensureArray(userOptions.patterns || OPTION_PATTERNS);
     const moduleId = userOptions.moduleId || OPTION_MODULE_ID;
 

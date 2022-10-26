@@ -1,23 +1,24 @@
 import { resolve } from 'path';
-// import { ensurePrefix, ensureSuffix } from '@antfu/utils';
+import micromatch from 'micromatch';
+import { ensurePrefix } from '@antfu/utils';
 
 import type { ModuleFile } from './types';
+import type { ModuleNode, ViteDevServer } from 'vite';
 
-// export function ensureSlash(str: string) {
-//     return ensureSuffix('/', ensurePrefix('/', str));
-// }
+import { VIRTUAL_MODULES_RESOLVE_PREFIX } from './constants';
 
-// export function buildPatternByModuleAndRegex(moduleDir: string, regex: string): string {
-//     return `**${ensureSlash(moduleDir)}**${ensurePrefix('/', regex)}`;
-// }
+/**
+ * Check if the file path is match patterns
+ */
+export function isMatchPatterns(fullFilePath: string, patterns: string[]): boolean {
+    return patterns.every(pattern => {
+        return micromatch.isMatch(fullFilePath, `**${ensurePrefix('/', pattern)}`)
+    })
+}
 
-// export function getModuleByFullFilePath(fullFilePath: string, options: ResolvedOptions): string | undefined {
-//     return options.patterns.find(moduleDir => {
-//         const pattern = buildPatternByModuleAndRegex(moduleDir, options.pattern);
-//         return micromatch.isMatch(fullFilePath, pattern)
-//     })
-// }
-
+/**
+ * Generate module object
+ */
 export function moduleFileGenerator(fullFilePath: string, viteRoot: string): ModuleFile {
     const relativeRootPath = fullFilePath.split(resolve(viteRoot)).pop();
     if (!relativeRootPath) {
@@ -45,4 +46,18 @@ export function moduleFileGenerator(fullFilePath: string, viteRoot: string): Mod
         relativeRootPath,
         isPrivate,
     };
+}
+
+/**
+ * Invalidate files in module
+ */
+export function invalidateFilesModule(server: ViteDevServer) {
+    const { moduleGraph } = server
+    const mods = moduleGraph.getModulesByFile(VIRTUAL_MODULES_RESOLVE_PREFIX)
+    if (mods) {
+        const seen = new Set<ModuleNode>()
+        mods.forEach((mod) => {
+            moduleGraph.invalidateModule(mod, seen)
+        })
+    }
 }

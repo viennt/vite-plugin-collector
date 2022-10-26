@@ -17,14 +17,14 @@ function VitePluginCollector(userOptions: UserOptions) {
             ctx.server = server;
         },
         resolveId(id: string) {
-            return id === userOptions.moduleId ? VIRTUAL_MODULES_RESOLVE_PREFIX + id : undefined;
+            return id === userOptions.moduleId ? `${VIRTUAL_MODULES_RESOLVE_PREFIX}?id=${id}` : undefined;
         },
         load(id: string) {
             if (!id.startsWith(VIRTUAL_MODULES_RESOLVE_PREFIX)) {
                 return;
             }
 
-            const moduleId = id.slice(VIRTUAL_MODULES_RESOLVE_PREFIX.length);
+            const moduleId = id.slice(VIRTUAL_MODULES_RESOLVE_PREFIX.length + 4);
             if (ctx.userOptions.moduleId !== moduleId) {
                 return;
             }
