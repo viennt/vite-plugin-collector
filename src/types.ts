@@ -1,9 +1,33 @@
 export interface ModuleFile {
+    /**
+     * File name without extension
+     * @example "navigations"
+     */
     fileName: string,
+    /**
+     * File extension
+     * @example "json"
+     */
     fileExtension: string,
+    /**
+     * Full file name with extension
+     * @example "navigations.json"
+     */
     fileFullName: string,
+    /**
+     * Absolute path
+     * @example "/Users/acme/.../project-acme/src/modules/customers/navigations.json"
+     */
     fullFilePath: string,
+    /**
+     * Path from project root
+     * @example "/src/modules/customers/navigations.json"
+     */
     relativeRootPath: string,
+    /**
+     * It's true if the file name starts with "_"
+     * @example false
+     */
     isPrivate: boolean,
 }
 

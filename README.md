@@ -1,7 +1,5 @@
 # @viennt/vite-plugin-collector
 
-`WIP: This plugin is NOT ready for production yet.`
-
 Module collector for Vite
 
 ## How to use
@@ -18,11 +16,11 @@ pnpm add @viennt/vite-plugin-collector
 
 ```javascript
 // vite.config.ts
-import collector from '@viennt/vite-plugin-collector';
+import vitePluginCollector from '@viennt/vite-plugin-collector';
 
 export default {
     plugins: [
-        collector(/* options */),
+        vitePluginCollector(/* options */),
     ]
 }
 ```
@@ -58,11 +56,35 @@ export interface UserOptions {
 
 ```typescript
 export interface ModuleFile {
+    /**
+     * File name without extension
+     * @example "navigations"
+     */
     fileName: string,
+    /**
+     * File extension
+     * @example "json"
+     */
     fileExtension: string,
+    /**
+     * Full file name with extension
+     * @example "navigations.json"
+     */
     fileFullName: string,
+    /**
+     * Absolute path
+     * @example "/Users/acme/.../project-acme/src/modules/customers/navigations.json"
+     */
     fullFilePath: string,
+    /**
+     * Path from project root
+     * @example "/src/modules/customers/navigations.json"
+     */
     relativeRootPath: string,
+    /**
+     * It's true if the file name starts with "_"
+     * @example false
+     */
     isPrivate: boolean,
 }
 ```
@@ -109,11 +131,11 @@ export interface ModuleFile {
 
 ```javascript
 // vite.config.ts
-import collector from '@viennt/vite-plugin-collector';
+import vitePluginCollector from '@viennt/vite-plugin-collector';
 
 export default {
     plugins: [
-        collector({
+        vitePluginCollector({
             patterns: ['src/modules/**/navigations.json'],
             moduleId: '~navigations',
             resolver: (item: ModuleFile, sourceString: string) => {
