@@ -20,7 +20,7 @@ export default defineConfig({
           patterns: ['src/modules/**/routes.json'],
           moduleId: '~routes',
           resolver: (item, sourceString) => {
-              const modulePath = item.relativeRootPath.replace(/routes.json/g,'')
+              const modulePath = item.relativeRootPath.replace(/routes.json/g, '')
               const routes = JSON.parse(sourceString);
 
               return routes.map(route => {

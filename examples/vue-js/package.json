@@ -1,10 +1,10 @@
 {
-  "name": "vue-admin",
+  "name": "vue-js",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "rimraf dev-dist && cross-env DEBUG=@viennt/vite-plugin-collector:* vite --force",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -15,8 +15,6 @@
   "devDependencies": {
     "@viennt/vite-plugin-collector": "workspace:*",
     "@vitejs/plugin-vue": "^3.1.0",
-    "cross-env": "^7.0.3",
-    "rimraf": "^3.0.2",
     "vite": "^3.1.0"
   }
 }
