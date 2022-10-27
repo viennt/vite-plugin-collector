@@ -1,10 +1,10 @@
-import type { ViteDevServer, ResolvedConfig } from 'vite';
+import type { Plugin, ViteDevServer, ResolvedConfig } from 'vite';
 import type { UserOptions } from './types';
 
 import { ModuleContext } from './context';
 import { VIRTUAL_MODULES_RESOLVE_PREFIX } from './constants';
 
-function VitePluginCollector(userOptions: UserOptions) {
+function VitePluginCollector(userOptions: UserOptions): Plugin {
     let ctx: ModuleContext;
 
     return {
@@ -35,5 +35,7 @@ function VitePluginCollector(userOptions: UserOptions) {
 }
 
 export * from './types';
+export * from './resolvers';
+
 export type { UserOptions as Options };
 export default VitePluginCollector;

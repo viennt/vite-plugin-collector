@@ -1,16 +1,10 @@
 import { normalizePath } from 'vite'
+import type { ResolvedConfig } from 'vite';
 
+import { defaultResolver } from './resolvers';
 import { OPTION_PATTERNS, OPTION_MODULE_ID } from './constants';
 
-import type { ResolvedConfig } from 'vite';
-import type { ResolvedOptions, UserOptions, ResolvedModuleFile, ModuleFile } from './types';
-
-/**
- * Default resolver function
- */
-async function defaultResolver(file: ModuleFile, sourceString: string): Promise<ResolvedModuleFile[]> {
-    return [{ file, sourceString }];
-}
+import type { ResolvedOptions, UserOptions } from './types';
 
 /**
  * Default transform function

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-import vitePluginCollector from '@viennt/vite-plugin-collector'
+import vitePluginCollector, { jsonResolver } from '@viennt/vite-plugin-collector'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,16 +11,14 @@ export default defineConfig({
       vitePluginCollector({
           patterns: ['src/modules/**/navigations.json'],
           moduleId: '~navigations',
-          resolver: (item, sourceString) => {
-              return JSON.parse(sourceString);
-          },
+          resolver: jsonResolver,
       }),
 
       vitePluginCollector({
           patterns: ['src/modules/**/routes.json'],
           moduleId: '~routes',
-          resolver: (item, sourceString) => {
-              const modulePath = item.relativeRootPath.replace(/routes.json/g, '')
+          resolver: ({ relativeRootPath }, sourceString) => {
+              const modulePath = relativeRootPath.replace(/routes.json/g, '')
               const routes = JSON.parse(sourceString);
 
               return routes.map(route => {
