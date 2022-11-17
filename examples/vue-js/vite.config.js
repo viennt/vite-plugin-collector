@@ -9,13 +9,13 @@ export default defineConfig({
       vue(),
 
       vitePluginCollector({
-          patterns: ['src/modules/**/navigations.json'],
+          patterns: 'src/modules/**/navigations.json',
           moduleId: '~navigations',
           resolver: jsonResolver,
       }),
 
       vitePluginCollector({
-          patterns: ['src/modules/**/routes.json'],
+          patterns: 'src/modules/**/routes.json',
           moduleId: '~routes',
           resolver: ({ relativeRootPath }, sourceString) => {
               const modulePath = relativeRootPath.replace(/routes.json/g, '')
