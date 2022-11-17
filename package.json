@@ -33,7 +33,7 @@
     "publish:ci": "esno scripts/publish.ts",
     "prepublishOnly": "npm run build",
     "release": "npx bumpp --push --tag --commit && npm publish",
-    "semantic-release": "semantic-release --branches main"
+    "semantic-release": "semantic-release"
   },
   "peerDependencies": {
     "vite": "^3.1.0",
@@ -54,7 +54,6 @@
     "@antfu/eslint-config": "^0.26.3",
     "@antfu/ni": "^0.18.0",
     "@antfu/utils": "^0.5.2",
-    "@semantic-release/changelog": "^6.0.1",
     "@types/debug": "^4.1.7",
     "@types/node": "^18.7.14",
     "@types/prompts": "^2.4.0",
