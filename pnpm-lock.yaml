@@ -28,7 +28,7 @@ importers:
       stringify-object: ^4.0.1
       tsup: ^6.2.3
       typescript: ^4.8.2
-      vite: ^4.0.0
+      vite: ^4.0.4
       vue: ^3.2.38
       workbox-build: ^6.5.4
       workbox-window: ^6.5.4
@@ -66,8 +66,8 @@ importers:
   examples/vue-js:
     specifiers:
       '@viennt/vite-plugin-collector': workspace:*
-      '@vitejs/plugin-vue': ^3.1.0
-      vite: ^4.0.0
+      '@vitejs/plugin-vue': ^4.0.0
+      vite: ^4.0.4
       vue: ^3.2.37
       vue-router: '4'
     dependencies:
@@ -75,7 +75,7 @@ importers:
       vue-router: 4.1.6_vue@3.2.45
     devDependencies:
       '@viennt/vite-plugin-collector': link:../..
-      '@vitejs/plugin-vue': 3.2.0_vite@4.0.4+vue@3.2.45
+      '@vitejs/plugin-vue': 4.0.0_vite@4.0.4+vue@3.2.45
       vite: 4.0.4
 
   examples/vue-ts:
@@ -2339,11 +2339,11 @@ packages:
       vue: 3.2.45
     dev: true
 
-  /@vitejs/plugin-vue/3.2.0_vite@4.0.4+vue@3.2.45:
-    resolution: {integrity: sha512-E0tnaL4fr+qkdCNxJ+Xd0yM31UwMkQje76fsDVBBUCoGOUPexu2VDUYHL8P4CwV+zMvWw6nlRw19OnRKmYAJpw==}
+  /@vitejs/plugin-vue/4.0.0_vite@4.0.4+vue@3.2.45:
+    resolution: {integrity: sha512-e0X4jErIxAB5oLtDqbHvHpJe/uWNkdpYV83AOG2xo2tEVSzCzewgJMtREZM30wXnM5ls90hxiOtAuVU6H5JgbA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      vite: ^3.0.0
+      vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
       vite: 4.0.4
